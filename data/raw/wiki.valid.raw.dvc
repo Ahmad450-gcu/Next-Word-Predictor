@@ -1,0 +1,5 @@
+outs:
+- md5: 4fbeb433dc75b3d1d8c57d207eececc2
+  size: 1146846
+  hash: md5
+  path: wiki.valid.raw

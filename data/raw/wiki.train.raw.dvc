@@ -1,0 +1,5 @@
+outs:
+- md5: fee9fa25ed4483d65f4938783fa07168
+  size: 10940747
+  hash: md5
+  path: wiki.train.raw

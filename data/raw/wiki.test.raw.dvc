@@ -1,0 +1,5 @@
+outs:
+- md5: 7c0137fc034ddbc56a296bce31b4f7fb
+  size: 1290590
+  hash: md5
+  path: wiki.test.raw
