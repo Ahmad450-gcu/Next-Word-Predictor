@@ -1,0 +1,43 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/preprocessing/clean_text.py --params params.yaml --raw-dir 
+      data/raw --out-dir data/processed
+    deps:
+    - path: data/raw/wiki.test.raw
+      hash: md5
+      md5: 7c0137fc034ddbc56a296bce31b4f7fb
+      size: 1290590
+    - path: data/raw/wiki.train.raw
+      hash: md5
+      md5: fee9fa25ed4483d65f4938783fa07168
+      size: 10940747
+    - path: data/raw/wiki.valid.raw
+      hash: md5
+      md5: 4fbeb433dc75b3d1d8c57d207eececc2
+      size: 1146846
+    - path: src/preprocessing/clean_text.py
+      hash: md5
+      md5: f3c3db1dbde2334fabff9ec54faffaa3
+      size: 3085
+    params:
+      params.yaml:
+        preprocessing:
+          remove_headings: true
+          lowercase: true
+          normalize_wikitext: true
+          unicode_normalize: true
+          normalize_numbers: true
+    outs:
+    - path: data/processed/test_texts.json
+      hash: md5
+      md5: fa440930cb1647e01e3a7184ab41b3d1
+      size: 1271455
+    - path: data/processed/train_texts.json
+      hash: md5
+      md5: d9cbcd31083a83eca6d35c965e85e864
+      size: 10802537
+    - path: data/processed/valid_texts.json
+      hash: md5
+      md5: 47b2098195dfba7b40fc86c7c873e782
+      size: 1131602

@@ -1,0 +1,6 @@
+preprocessing:
+  remove_headings: true
+  lowercase: true
+  normalize_wikitext: true
+  unicode_normalize: true
+  normalize_numbers: true
