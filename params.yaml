@@ -4,3 +4,7 @@ preprocessing:
   normalize_wikitext: true
   unicode_normalize: true
   normalize_numbers: true
+
+tokenizer:
+  min_frequency: 3
+  oov_token: "<UNK>"

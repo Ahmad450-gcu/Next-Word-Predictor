@@ -12,3 +12,20 @@ stages:
       - data/processed/train_texts.json
       - data/processed/valid_texts.json
       - data/processed/test_texts.json
+  tokenize:
+    cmd: python src/preprocessing/tokenizer.py --params params.yaml --in-dir data/processed --out-dir data/processed
+    deps:
+      - src/preprocessing/tokenizer.py
+      - data/processed/train_texts.json
+      - data/processed/valid_texts.json
+      - data/processed/test_texts.json
+    params:
+      - tokenizer
+    outs:
+      - data/processed/tokenizer_word_index.json
+      - data/processed/train_sequences.json
+      - data/processed/valid_sequences.json
+      - data/processed/test_sequences.json
+    metrics:
+      - data/processed/vocab_stats.json:
+          cache: false

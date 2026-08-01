@@ -41,3 +41,49 @@ stages:
       hash: md5
       md5: 47b2098195dfba7b40fc86c7c873e782
       size: 1131602
+  tokenize:
+    cmd: python src/preprocessing/tokenizer.py --params params.yaml --in-dir 
+      data/processed --out-dir data/processed
+    deps:
+    - path: data/processed/test_texts.json
+      hash: md5
+      md5: fa440930cb1647e01e3a7184ab41b3d1
+      size: 1271455
+    - path: data/processed/train_texts.json
+      hash: md5
+      md5: d9cbcd31083a83eca6d35c965e85e864
+      size: 10802537
+    - path: data/processed/valid_texts.json
+      hash: md5
+      md5: 47b2098195dfba7b40fc86c7c873e782
+      size: 1131602
+    - path: src/preprocessing/tokenizer.py
+      hash: md5
+      md5: 012adb5d6f42c46cfcd64a4e261aefcd
+      size: 2926
+    params:
+      params.yaml:
+        tokenizer:
+          min_frequency: 3
+          oov_token: <UNK>
+    outs:
+    - path: data/processed/test_sequences.json
+      hash: md5
+      md5: 7274fc2eb973a146695c844d1686a080
+      size: 1005866
+    - path: data/processed/tokenizer_word_index.json
+      hash: md5
+      md5: be09ed42eca188a7a27e37a7e6a1f6e3
+      size: 614412
+    - path: data/processed/train_sequences.json
+      hash: md5
+      md5: 8c157950151642415059feb26e429ee3
+      size: 8802658
+    - path: data/processed/valid_sequences.json
+      hash: md5
+      md5: bab7f1672916161a0ee291b18b5d2942
+      size: 898742
+    - path: data/processed/vocab_stats.json
+      hash: md5
+      md5: c7ce925455d731d0f63ad5cb6ae82457
+      size: 494
