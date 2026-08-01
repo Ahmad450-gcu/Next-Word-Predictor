@@ -3,4 +3,3 @@ __pycache__/
 *.pyc
 data/processed/
 data/interim/
-models/

@@ -1,0 +1,5 @@
+outs:
+- md5: afa3ede1a87d8cf814253d58db07de00
+  size: 135430522
+  hash: md5
+  path: best_model_tied.keras
