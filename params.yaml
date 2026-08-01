@@ -8,3 +8,6 @@ preprocessing:
 tokenizer:
   min_frequency: 3
   oov_token: "<UNK>"
+
+sequences:
+  sequence_length: 50

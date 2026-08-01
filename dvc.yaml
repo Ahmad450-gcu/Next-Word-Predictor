@@ -29,3 +29,22 @@ stages:
     metrics:
       - data/processed/vocab_stats.json:
           cache: false
+  build_sequences:
+    cmd: python src/preprocessing/sequences.py --params params.yaml --in-dir data/processed --out-dir data/processed
+    deps:
+      - src/preprocessing/sequences.py
+      - data/processed/train_sequences.json
+      - data/processed/valid_sequences.json
+      - data/processed/test_sequences.json
+    params:
+      - sequences
+    outs:
+      - data/processed/train_X.npy
+      - data/processed/train_y.npy
+      - data/processed/valid_X.npy
+      - data/processed/valid_y.npy
+      - data/processed/test_X.npy
+      - data/processed/test_y.npy
+    metrics:
+      - data/processed/sequence_stats.json:
+          cache: false

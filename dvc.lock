@@ -87,3 +87,56 @@ stages:
       hash: md5
       md5: c7ce925455d731d0f63ad5cb6ae82457
       size: 494
+  build_sequences:
+    cmd: python src/preprocessing/sequences.py --params params.yaml --in-dir 
+      data/processed --out-dir data/processed
+    deps:
+    - path: data/processed/test_sequences.json
+      hash: md5
+      md5: 7274fc2eb973a146695c844d1686a080
+      size: 1005866
+    - path: data/processed/train_sequences.json
+      hash: md5
+      md5: 8c157950151642415059feb26e429ee3
+      size: 8802658
+    - path: data/processed/valid_sequences.json
+      hash: md5
+      md5: bab7f1672916161a0ee291b18b5d2942
+      size: 898742
+    - path: src/preprocessing/sequences.py
+      hash: md5
+      md5: e518a5df13a5f3a0a12981e91e043345
+      size: 1627
+    params:
+      params.yaml:
+        sequences:
+          sequence_length: 50
+    outs:
+    - path: data/processed/sequence_stats.json
+      hash: md5
+      md5: d7dcbddc62f154baf971014478db9806
+      size: 113
+    - path: data/processed/test_X.npy
+      hash: md5
+      md5: f0a685af471a3505a5e3086d96634a5f
+      size: 39942928
+    - path: data/processed/test_y.npy
+      hash: md5
+      md5: 7c297ddf1b9cd809e394112ae2b5b67d
+      size: 798984
+    - path: data/processed/train_X.npy
+      hash: md5
+      md5: 6b7f8370468ad69b619ec0bbb704e1a1
+      size: 338802128
+    - path: data/processed/train_y.npy
+      hash: md5
+      md5: 1900567ce542eec7839b2296ffddd67c
+      size: 6776168
+    - path: data/processed/valid_X.npy
+      hash: md5
+      md5: 89940d2b1cde5c9ff0329fa93c4ffe65
+      size: 35593328
+    - path: data/processed/valid_y.npy
+      hash: md5
+      md5: e40c05df32b9709eeea0bc9e09e3f120
+      size: 711992
