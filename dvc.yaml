@@ -48,3 +48,16 @@ stages:
     metrics:
       - data/processed/sequence_stats.json:
           cache: false
+  evaluate:
+    cmd: python -m src.evaluate --params params.yaml --data-dir data/processed --model-path models/best_model_tied.keras --out metrics.json
+    deps:
+      - src/evaluate.py
+      - src/model/tied_lstm.py
+      - models/best_model_tied.keras
+      - data/processed/test_X.npy
+      - data/processed/test_y.npy
+    params:
+      - evaluate.batch_size
+    metrics:
+      - metrics.json:
+          cache: false

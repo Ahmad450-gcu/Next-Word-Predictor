@@ -11,3 +11,6 @@ tokenizer:
 
 sequences:
   sequence_length: 50
+
+evaluate:
+  batch_size: 128

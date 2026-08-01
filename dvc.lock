@@ -140,3 +140,35 @@ stages:
       hash: md5
       md5: e40c05df32b9709eeea0bc9e09e3f120
       size: 711992
+  evaluate:
+    cmd: python -m src.evaluate --params params.yaml --data-dir data/processed 
+      --model-path models/best_model_tied.keras --out metrics.json
+    deps:
+    - path: data/processed/test_X.npy
+      hash: md5
+      md5: f0a685af471a3505a5e3086d96634a5f
+      size: 39942928
+    - path: data/processed/test_y.npy
+      hash: md5
+      md5: 7c297ddf1b9cd809e394112ae2b5b67d
+      size: 798984
+    - path: models/best_model_tied.keras
+      hash: md5
+      md5: afa3ede1a87d8cf814253d58db07de00
+      size: 135430522
+    - path: src/evaluate.py
+      hash: md5
+      md5: dbc07f0b1860c664e85a94e5a9d61bb3
+      size: 1757
+    - path: src/model/tied_lstm.py
+      hash: md5
+      md5: 6c46d3371bb9ab618c44056f07192a94
+      size: 2433
+    params:
+      params.yaml:
+        evaluate.batch_size: 128
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 7fca249d16ea0384cc3d30425ba3111e
+      size: 171
