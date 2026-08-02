@@ -1,10 +1,16 @@
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 import json
 import numpy as np
 import tensorflow as tf
 from app.core.config import settings
 from src.model.tied_lstm import TiedLSTMLanguageModel
 from src.preprocessing.clean_text import normalize_unicode, normalize_artifacts, mask_numbers
-
 
 print("Loading tokenizer...")
 with open(settings.tokenizer_path) as f:
