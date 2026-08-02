@@ -25,17 +25,19 @@ function PredictForm() {
   }
 
   return (
-    <div>
+    <section className="card">
       <form onSubmit={handleSubmit}>
         <textarea
+          className="seed-input"
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={4}
-          placeholder="Type some text..."
+          placeholder="Begin a sentence…"
         />
-        <div>
-          <label>
-            Number of predictions:
+
+        <div className="controls">
+          <label className="stepper">
+            <span>Candidates</span>
             <input
               type="number"
               min={1}
@@ -44,15 +46,16 @@ function PredictForm() {
               onChange={(e) => setTopK(Number(e.target.value))}
             />
           </label>
+
+          <button id='pred-but' type="submit" disabled={loading || text.trim().length === 0}>
+            {loading ? "Predicting…" : "Predict next word"}
+          </button>
         </div>
-        <button type="submit" disabled={loading || text.trim().length === 0}>
-          {loading ? "Predicting..." : "Predict"}
-        </button>
       </form>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <PredictionList predictions={predictions} />
-    </div>
+      {error && <p className="error" role="alert">{error}</p>}
+      <PredictionList predictions={predictions} loading={loading} topK={topK} />
+    </section>
   )
 }
 
