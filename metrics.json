@@ -1,0 +1,6 @@
+{
+  "test_loss": 4.822246074676514,
+  "test_perplexity": 124.24383855797225,
+  "test_top1_accuracy": 0.2457163780927658,
+  "test_top5_accuracy": 0.45214155316352844
+}
