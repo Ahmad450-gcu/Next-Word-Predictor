@@ -1,6 +1,5 @@
 from pathlib import Path
-from pydantic_settings import BaseSettings
-
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     project_root: Path = Path(__file__).resolve().parents[3]
@@ -9,7 +8,6 @@ class Settings(BaseSettings):
     sequence_length: int = 50
     default_top_k: int = 5
 
-    class Config:
-        env_prefix = "NWP_"
+    model_config = SettingsConfigDict(env_prefix="NWP_")
 
 settings = Settings()
