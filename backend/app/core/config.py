@@ -7,7 +7,12 @@ class Settings(BaseSettings):
     tokenizer_path: Path = project_root / "data" / "processed" / "tokenizer_word_index.json"
     sequence_length: int = 50
     default_top_k: int = 5
+    cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     model_config = SettingsConfigDict(env_prefix="NWP_")
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 settings = Settings()
