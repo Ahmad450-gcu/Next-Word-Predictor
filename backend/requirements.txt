@@ -1,7 +1,7 @@
 fastapi
 uvicorn[standard]
 pydantic-settings
-tensorflow
+tensorflow-cpu
 numpy
 huggingface_hub
 PyYAML
