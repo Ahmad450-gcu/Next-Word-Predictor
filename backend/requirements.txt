@@ -4,3 +4,4 @@ pydantic-settings
 tensorflow
 numpy
 huggingface_hub
+PyYAML

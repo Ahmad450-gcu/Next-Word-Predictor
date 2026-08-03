@@ -1,0 +1,11 @@
+frontend/
+notebooks/
+data/
+models/
+scripts/
+tests/
+.venv/
+.git/
+.dvc/
+__pycache__/
+*.pyc
