@@ -9,6 +9,10 @@ class Settings(BaseSettings):
     default_top_k: int = 5
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
+    use_hf_hub: bool = False
+    hf_repo_id: str = "dev-Ahmad450/next-word-predictor"
+    hf_revision: str = "v1.0"
+
     model_config = SettingsConfigDict(env_prefix="NWP_")
 
     @property

@@ -1,6 +1,5 @@
 import sys
 from pathlib import Path
-
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -12,15 +11,27 @@ from app.core.config import settings
 from src.model.tied_lstm import TiedLSTMLanguageModel
 from src.preprocessing.clean_text import normalize_unicode, normalize_artifacts, mask_numbers
 
+def _resolve_paths():
+    if settings.use_hf_hub:
+        from huggingface_hub import hf_hub_download
+        print(f"Downloading model + tokenizer from {settings.hf_repo_id}@{settings.hf_revision}...")
+        model_path = hf_hub_download(repo_id=settings.hf_repo_id, filename="best_model_tied.keras", revision=settings.hf_revision)
+        tokenizer_path = hf_hub_download(repo_id=settings.hf_repo_id, filename="tokenizer_word_index.json", revision=settings.hf_revision)
+        return model_path, tokenizer_path
+    else:
+        return settings.model_path, settings.tokenizer_path
+
+model_path, tokenizer_path = _resolve_paths()
+
 print("Loading tokenizer...")
-with open(settings.tokenizer_path) as f:
+with open(tokenizer_path) as f:
     WORD_INDEX = json.load(f)
 INDEX_WORD = {i: w for w, i in WORD_INDEX.items()}
 OOV_INDEX = WORD_INDEX["<UNK>"]
 
 print("Loading model...")
 MODEL = tf.keras.models.load_model(
-    settings.model_path,
+    model_path,
     custom_objects={"TiedLSTMLanguageModel": TiedLSTMLanguageModel},
 )
 print("Model loaded.")
@@ -30,7 +41,6 @@ def _normalize_input(text: str) -> str:
     text = normalize_artifacts(text)
     text = mask_numbers(text)
     return text.lower()
-
 
 def predict_next_words(text: str, top_k: int = 5):
     normalized = _normalize_input(text)
