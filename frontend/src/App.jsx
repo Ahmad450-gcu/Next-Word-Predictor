@@ -8,7 +8,7 @@ function App() {
           Predict. <span>The next word, before you write it.</span>
         </h1>
         <p className="hero-sub">
-          A tied-weight LSTM trained on WikiText-2 — 124 perplexity, 29,093-word vocabulary.
+          A tied-weight LSTM trained on WikiText-2. Try out by writing some Wikipedia style text.
         </p>
       </header>
       <PredictForm />
