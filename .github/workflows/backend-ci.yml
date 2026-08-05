@@ -1,0 +1,55 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "src/**"
+      - ".github/workflows/backend-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "src/**"
+      - ".github/workflows/backend-ci.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install -r backend/requirements-dev.txt
+
+      - name: Fetch model + tokenizer from Hugging Face Hub
+        run: |
+          python - <<'PY'
+          from huggingface_hub import hf_hub_download
+          import shutil, pathlib
+
+          model = hf_hub_download(repo_id="dev-Ahmad450/next-word-predictor", filename="best_model_tied.keras", revision="main")
+          tok = hf_hub_download(repo_id="dev-Ahmad450/next-word-predictor", filename="tokenizer_word_index.json", revision="main")
+
+          pathlib.Path("models").mkdir(exist_ok=True)
+          pathlib.Path("data/processed").mkdir(parents=True, exist_ok=True)
+          shutil.copy(model, "models/best_model_tied.keras")
+          shutil.copy(tok, "data/processed/tokenizer_word_index.json")
+          PY
+
+      - name: Run tests
+        working-directory: backend
+        run: pytest -v
