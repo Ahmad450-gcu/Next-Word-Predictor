@@ -52,3 +52,5 @@ dvc repro
 ```
 
 See `README` inside `backend/` and `frontend/` for more (if present), and `dvc.yaml` for the full stage graph.
+
+Testing GitHub Actions CI pipeline.
