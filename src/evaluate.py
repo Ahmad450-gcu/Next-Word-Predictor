@@ -2,6 +2,8 @@ import argparse
 import json
 from pathlib import Path
 import numpy as np
+import mlflow
+import mlflow.tensorflow
 import yaml
 import tensorflow as tf
 from src.model.tied_lstm import TiedLSTMLanguageModel
@@ -51,6 +53,16 @@ def main():
 
     with open(args.out, "w") as f:
         json.dump(metrics, f, indent=2)
+
+    mlflow.set_experiment("next-word-predictor")
+    with mlflow.start_run():
+        mlflow.log_params({**params["model"], **params["train"]})
+        mlflow.log_metrics(metrics)
+        mlflow.log_artifact(args.model_path, artifact_path="model")
+        mlflow.log_artifact(str(data_dir / "tokenizer_word_index.json"), artifact_path="model")
+        run = mlflow.active_run()
+        model_uri = f"runs:/{run.info.run_id}/model/{Path(args.model_path).name}"
+        mlflow.register_model(model_uri=model_uri, name="next-word-predictor")
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,5 @@
+tensorflow-cpu
+numpy
+PyYAML
+mlflow
+dagshub
