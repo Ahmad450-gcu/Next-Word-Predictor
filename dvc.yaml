@@ -48,6 +48,20 @@ stages:
     metrics:
       - data/processed/sequence_stats.json:
           cache: false
+  train:
+    cmd: python -m src.train --params params.yaml --data-dir data/processed --model-dir models
+    deps:
+      - src/train.py
+      - src/model/tied_lstm.py
+      - data/processed/train_X.npy
+      - data/processed/train_y.npy
+      - data/processed/valid_X.npy
+      - data/processed/valid_y.npy
+    params:
+      - model
+      - train
+    outs:
+      - models/best_model_tied.keras
   evaluate:
     cmd: python -m src.evaluate --params params.yaml --data-dir data/processed --model-path models/best_model_tied.keras --out metrics.json
     deps:
