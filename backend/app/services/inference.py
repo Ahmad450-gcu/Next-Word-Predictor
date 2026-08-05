@@ -28,6 +28,11 @@ with open(tokenizer_path) as f:
     WORD_INDEX = json.load(f)
 INDEX_WORD = {i: w for w, i in WORD_INDEX.items()}
 OOV_INDEX = WORD_INDEX["<UNK>"]
+SPECIAL_TOKENS = {"<UNK>", "<unk>", "<num>", "<NUM>"}
+SPECIAL_INDICES = np.array(
+    sorted({WORD_INDEX[t] for t in SPECIAL_TOKENS if t in WORD_INDEX}),
+    dtype=np.int64,
+)
 
 print("Loading model...")
 MODEL = tf.keras.models.load_model(
@@ -51,6 +56,10 @@ def predict_next_words(text: str, top_k: int = 5):
     token_ids = [WORD_INDEX.get(tok, OOV_INDEX) for tok in context]
     input_tensor = tf.constant([token_ids], dtype=tf.int32)
     probs = MODEL(input_tensor, training=False)[0].numpy()
+
+    if SPECIAL_INDICES.size:
+        probs = probs.copy()
+        probs[SPECIAL_INDICES] = -np.inf
 
     top_indices = np.argsort(probs)[::-1][:top_k]
     predictions = [
