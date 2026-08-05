@@ -172,3 +172,50 @@ stages:
       hash: md5
       md5: 7fca249d16ea0384cc3d30425ba3111e
       size: 171
+  train:
+    cmd: python -m src.train --params params.yaml --data-dir data/processed 
+      --model-dir models
+    deps:
+    - path: data/processed/train_X.npy
+      hash: md5
+      md5: 6b7f8370468ad69b619ec0bbb704e1a1
+      size: 338802128
+    - path: data/processed/train_y.npy
+      hash: md5
+      md5: 1900567ce542eec7839b2296ffddd67c
+      size: 6776168
+    - path: data/processed/valid_X.npy
+      hash: md5
+      md5: 89940d2b1cde5c9ff0329fa93c4ffe65
+      size: 35593328
+    - path: data/processed/valid_y.npy
+      hash: md5
+      md5: e40c05df32b9709eeea0bc9e09e3f120
+      size: 711992
+    - path: src/model/tied_lstm.py
+      hash: md5
+      md5: 6c46d3371bb9ab618c44056f07192a94
+      size: 2433
+    - path: src/train.py
+      hash: md5
+      md5: f4875bbd92415c5fa5691bd7972e9668
+      size: 4513
+    params:
+      params.yaml:
+        model:
+          embedding_dim: 256
+          lstm_units: 512
+          dropout_rate: 0.3
+        train:
+          batch_size: 128
+          epochs: 30
+          learning_rate: 0.0001
+          precision_policy: float32
+          patience: 6
+          reduce_lr_patience: 2
+          clipnorm: 1.0
+    outs:
+    - path: models/best_model_tied.keras
+      hash: md5
+      md5: afa3ede1a87d8cf814253d58db07de00
+      size: 135430522
