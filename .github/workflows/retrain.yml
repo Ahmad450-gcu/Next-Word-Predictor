@@ -1,0 +1,85 @@
+name: Retrain
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'params.yaml'
+  workflow_dispatch:
+
+env:
+  MLFLOW_TRACKING_URI: https://dagshub.com/Ahmad450-gcu/Next-Word-Predictor.mlflow
+  MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USER }}
+  MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Configure DVC remote credentials
+        run: |
+          dvc remote modify origin --local access_key_id ${{ secrets.DAGSHUB_TOKEN }}
+          dvc remote modify origin --local secret_access_key ${{ secrets.DAGSHUB_TOKEN }}
+
+      - name: Pull tracked data/models
+        run: dvc pull
+
+      - name: Reproduce pipeline (retrain + evaluate)
+        run: dvc repro
+
+      - name: Push updated artifacts to DVC remote
+        run: dvc push
+
+  compare:
+    needs: retrain
+    runs-on: ubuntu-latest
+    outputs:
+      promote: ${{ steps.compare.outputs.promote }}
+      candidate_version: ${{ steps.compare.outputs.candidate_version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+
+      - name: Compare new model against champion
+        id: compare
+        continue-on-error: true   
+        run: python scripts/compare_model.py
+
+  promote:
+    needs: compare
+    if: needs.compare.outputs.promote == 'true'
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+
+      - name: Promote candidate to champion
+        id: promote_script
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          CANDIDATE_VERSION: ${{ needs.compare.outputs.candidate_version }}
+        run: python scripts/promote_model.py
+
+      - name: Update Railway and trigger redeploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          npm install -g @railway/cli
+          railway variables set NWP_HF_REVISION=${{ steps.promote_script.outputs.hf_revision }} --service Next-Word-Predictor
+          railway up --service  Next-Word-Predictor  --detach
